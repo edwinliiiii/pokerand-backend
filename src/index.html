@@ -8,10 +8,15 @@
     <title>Random Pokemon Generator</title>
 </head>
 <body>
-    <div id="app"></div>
+    <div id="app">
+        <img class="sprite" :src="sprite" :alt="name"/>
+        <h1 class="name"> {{name}} </h1>
+        <div class="row"><img v-for="item in typeImages" :key="item.imageURL" :src="item.imageURL" class="typeImage"/></div>
+        <button v-on:click="randomPokemon()"> Generate Random </button>
+    </div>
 
     <!-- VUE CDN -->
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> 
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src='./app.js'></script>
 </body>
 </html>

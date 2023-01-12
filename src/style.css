@@ -8,3 +8,27 @@
     justify-content: center;
     align-items: center;
 }
+
+.name {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    align-items: center;
+}
+
+.art {
+    width: 200px;
+    height: 200px;
+    align-items: center;
+}
+
+.sprite {
+    width: 200px;
+    height: 200px;
+    align-items: center;
+    outline-style: solid;
+    outline: 2px;
+}
+
+.typeImage {
+    margin: 5px;
+    margin-bottom: 10px;
+}

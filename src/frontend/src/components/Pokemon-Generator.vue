@@ -1,8 +1,8 @@
 <template>
     <img class="sprite" :src="sprite" :alt="name"/>
     <h1 class="name"> {{name}} </h1>
-    <div class="row"><img v-for="item in typeImages" :key="item.imageURL" :src="item.imageURL" class="typeImage"/></div>
-    <button v-on:click="randomPokemon()"> Generate Random </button>
+    <div class="row-types"><img v-for="item in typeImages" :key="item.imageURL" :src="item.imageURL" class="typeImage"/></div>
+    <button class="genButton" v-on:click="randomPokemon()"> Generate Random </button>
 </template>
 
 <script>
@@ -16,10 +16,10 @@ export default {
             typeMap: this.initMap(new Map()),
             typeImages:[
                 {
-                    imageURL: '/types/Grass.jpeg'
+                    imageURL: 'https://raw.githubusercontent.com/edwinliiiii/pokerand/main/src/frontend/types/Grass.jpeg'
                 },
                 {
-                    imageURL: '../types/Poison.jpeg'
+                    imageURL: 'https://raw.githubusercontent.com/edwinliiiii/pokerand/main/src/frontend/types/Poison.jpeg'
                 },
             ],
         }
@@ -37,7 +37,11 @@ export default {
             let randomName = randomPokemon.name
             this.name = randomName.charAt(0).toUpperCase() + randomName.slice(1); // Capitalizes First Letter.
             //this.art = randomPokemon.sprites.other.official-artwork.front_default
-            this.sprite = randomPokemon.sprites.front_default
+            if (randomPokemon.sprites.front_default == null) {
+              this.sprite = 'src/frontend/src/components/pokeNotFound.png'
+            } else {
+              this.sprite = randomPokemon.sprites.front_default
+            } 
 
             // handling types
             this.type = []
@@ -54,24 +58,25 @@ export default {
             }
         },
         initMap(map) {
-                map.set('bug', "../../../types/Bug.jpeg")
-                map.set('dark', "../../../types/Dark.jpeg")
-                map.set('dragon', "../../../types/Dragon.jpeg")
-                map.set('electric', "../../../ypes/Electric.jpeg")
-                map.set('fairy', "../../../types/Fairy.jpeg")
-                map.set('fighting', "../../../types/Fight.jpeg")
-                map.set('fire', "../../../types/Fire.jpeg")
-                map.set('flying', "../../../types/Flying.jpeg")
-                map.set('ghost', "../../../types/Ghost.jpeg")
-                map.set('grass', "../../../types/Grass.jpeg")
-                map.set('ground', "../../../types/Ground.jpeg")
-                map.set('ice', "../../../types/Ice.jpeg")
-                map.set('normal', "../../../types/Normal.jpeg")
-                map.set('poison', "../../../types/Poison.jpeg")
-                map.set('psychic', "../../../types/Psychic.jpeg")
-                map.set('rock', "../../../types/Rock.jpeg")
-                map.set('steel', "../../../types/Steel.jpeg")
-                map.set('water', "../../../types/Water.jpeg")
+                map.set('bug', "https://raw.githubusercontent.com/edwinliiiii/pokerand/main/src/frontend/types/Bug.jpeg")
+                map.set('dark', "https://raw.githubusercontent.com/edwinliiiii/pokerand/main/src/frontend/types/Dark.jpeg")
+                map.set('dragon', "https://raw.githubusercontent.com/edwinliiiii/pokerand/main/src/frontend/types/Dragon.jpeg")
+                map.set('electric', "https://raw.githubusercontent.com/edwinliiiii/pokerand/main/src/frontend/types/Electric.jpeg")
+                map.set('fairy', "https://raw.githubusercontent.com/edwinliiiii/pokerand/main/src/frontend/types/Fairy.jpeg")
+                map.set('fighting', "https://raw.githubusercontent.com/edwinliiiii/pokerand/main/src/frontend/types/Fight.jpeg")
+                map.set('fire', "https://raw.githubusercontent.com/edwinliiiii/pokerand/main/src/frontend/types/Fire.jpeg")
+                map.set('flying', "https://raw.githubusercontent.com/edwinliiiii/pokerand/main/src/frontend/types/Flying.jpeg")
+                map.set('ghost', "https://raw.githubusercontent.com/edwinliiiii/pokerand/main/src/frontend/types/Ghost.jpeg")
+                map.set('grass', "https://raw.githubusercontent.com/edwinliiiii/pokerand/main/src/frontend/types/Grass.jpeg")
+                map.set('ground', "https://raw.githubusercontent.com/edwinliiiii/pokerand/main/src/frontend/types/Ground.jpeg")
+                map.set('ice', "https://raw.githubusercontent.com/edwinliiiii/pokerand/main/src/frontend/types/Ice.jpeg")
+                map.set('normal', "https://raw.githubusercontent.com/edwinliiiii/pokerand/main/src/frontend/types/Normal.jpeg")
+                map.set('poison', "https://raw.githubusercontent.com/edwinliiiii/pokerand/main/src/frontend/types/Poison.jpeg")
+                map.set('psychic', "https://raw.githubusercontent.com/edwinliiiii/pokerand/main/src/frontend/types/Psychic.jpeg")
+                map.set('rock', "https://raw.githubusercontent.com/edwinliiiii/pokerand/main/src/frontend/types/Rock.jpeg")
+                map.set('steel', "https://raw.githubusercontent.com/edwinliiiii/pokerand/main/src/frontend/types/Steel.jpeg")
+                map.set('water', "https://raw.githubusercontent.com/edwinliiiii/pokerand/main/src/frontend/types/Water.jpeg")
+                map.set('water', "https://raw.githubusercontent.com/edwinliiiii/pokerand/main/src/frontend/types/Water.jpeg")
                 return map
         }
     }
@@ -79,12 +84,10 @@ export default {
 </script>
 
 <style>
-#app {
-    width: 400px;
-    height: 100vh;
-    margin: auto;
+#app1 {
+    width: 50px;
+    height: 100px;
     text-align: center;
-    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -113,4 +116,6 @@ export default {
     margin: 5px;
     margin-bottom: 10px;
 }
+
+
 </style>

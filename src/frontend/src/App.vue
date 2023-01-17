@@ -1,19 +1,15 @@
 <template>
-  <div>
-    <div class = "app2"><PokeGenerator/></div>
-    <div class="app1"><Recent/></div>
-
+  <div id="app">
+    <div><PokeGenerator/></div>
   </div>
 </template>
 
 <script>
-import Recent from './components/Recent-Saver.vue'
 import PokeGenerator from './components/Pokemon-Generator.vue'
 
 export default {
   name: 'app',
   components: {
-    Recent,
     PokeGenerator,
   }
 }
@@ -21,29 +17,15 @@ export default {
 
 <style>
 #app {
-    width: 400px;
-    height: 100vh;
+    width: 450px;
+    /*height: 100vh; */
     margin: auto;
     text-align: center;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    /*max-height: 100%; 
+    overflow-y: scroll; */
 } 
-
-.genButton {
-  width: 150px;
-  height: 35px;
-  margin:auto;
-  padding:auto;
-  background-color:orangered;
-}
-
-.addButton {
-  width: 150px;
-  height: 35px;
-  margin:auto;
-  padding:auto;
-  background-color:lightgray;
-}
 </style>

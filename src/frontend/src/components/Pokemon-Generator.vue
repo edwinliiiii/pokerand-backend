@@ -1,12 +1,49 @@
 <template>
+    <div style="display:flex; flex-direction: column;">
+    <!-- Generator Section -->
+    <div class="generator">
     <img class="sprite" :src="sprite" :alt="name"/>
     <h1 class="name"> {{name}} </h1>
     <div class="row-types"><img v-for="item in typeImages" :key="item.imageURL" :src="item.imageURL" class="typeImage"/></div>
-    <button class="genButton" v-on:click="randomPokemon()"> Generate Random </button>
+    <div class="col-buttons"><button class="genButton" v-on:click="randomPokemon()"> Generate Random </button>
+    <button class="addButton" v-on:click="addPokemon()"> Add to Collection </button></div>
+    <br><br><hr><br><br>
+    </div>
+
+    <!-- Collected Section -->
+    <p class="error" v-if="error">{{ error }}</p>
+    <div class="collect-container">
+        <div style="display:flex; flex-direction:row"
+            v-for="(poke, index) in collected"
+            v-bind:item="poke"
+            v-bind:index="index"
+            v-bind:key="poke._id">
+
+            <div class="collect">
+
+                <img class="collect-sprite" :src="poke.sprite" :alt="name"/>
+
+                <div style="display:flex; flex-direction: column; align-items: center; margin-top: 7px">
+                    <p class="collect-name"> {{ poke.name }}</p>
+                    <img v-for="item in poke.typeImages" :key="item.imageURL" :src="item.imageURL" class="collect-typeImage"/>
+                </div>
+
+            </div>
+
+            <button class="deleteButton" v-on:click="deletePokemon(poke._id)"> Delete </button>
+
+        </div>
+
+    </div>
+    </div>
 </template>
 
 <script>
+import CollectService from '../CollectService'
 export default {
+    // containing our data. could be better abstracted 
+    // into Pokemon objects, but we can just utilize fields 
+    // of the current statebelow.
     data() {
         return {
             name: 'Bulbasaur',
@@ -22,8 +59,20 @@ export default {
                     imageURL: 'https://raw.githubusercontent.com/edwinliiiii/pokerand/main/src/frontend/types/Poison.jpeg'
                 },
             ],
+            collected: [],
+            error: '',
         }
     },
+    // on initialization
+    async created() {
+        try {
+            this.collected = await CollectService.getCollection()
+            this.collected = this.collected.reverse()
+        } catch(err) {
+            this.err = err.message
+        }
+    },
+    // all methods
     methods: {
         async randomPokemon() {
             const res = await fetch('https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0')
@@ -38,7 +87,7 @@ export default {
             this.name = randomName.charAt(0).toUpperCase() + randomName.slice(1); // Capitalizes First Letter.
             //this.art = randomPokemon.sprites.other.official-artwork.front_default
             if (randomPokemon.sprites.front_default == null) {
-              this.sprite = 'src/frontend/src/components/pokeNotFound.png'
+              this.sprite = 'https://github.com/edwinliiiii/pokerand/blob/main/src/frontend/src/assets/pokeNotFound.png?raw=true'
             } else {
               this.sprite = randomPokemon.sprites.front_default
             } 
@@ -78,14 +127,24 @@ export default {
                 map.set('water', "https://raw.githubusercontent.com/edwinliiiii/pokerand/main/src/frontend/types/Water.jpeg")
                 map.set('water', "https://raw.githubusercontent.com/edwinliiiii/pokerand/main/src/frontend/types/Water.jpeg")
                 return map
+        },
+        async addPokemon() {
+            await CollectService.insertPoke(this.name, this.sprite, this.type, this.typeImages)
+            this.collected = await CollectService.getCollection()
+            this.collected = this.collected.reverse()
+        },
+        async deletePokemon(id) {
+            await CollectService.deletePoke(id)
+            this.collected = await CollectService.getCollection()
+            this.collected = this.collected.reverse()
         }
     }
 }
 </script>
 
-<style>
+<style scoped>
 #app1 {
-    width: 50px;
+    width: 100px;
     height: 100px;
     text-align: center;
     flex-direction: column;
@@ -94,6 +153,8 @@ export default {
 }
 
 .name {
+    margin-left: 5px;
+    max-width: 350px;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     align-items: center;
 }
@@ -110,12 +171,100 @@ export default {
     align-items: center;
     outline-style: solid;
     outline: 2px;
+    margin-top: 10px;
 }
 
 .typeImage {
     margin: 5px;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
 }
 
+.teamTitle {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    align-items: center;
+    flex-direction: column;
+}
 
+div.container { max-width: 800px; margin: 0 auto; }
+
+p.error { border: 1px solid #ff5b5f; background-color: #ffc5c1; padding: 10px; margin-bottom: 15px; }
+
+div.collect { position: relative; border: 1px solid darkgray; background-color: lightblue; padding: 10px 10px 30px 10px; margin-bottom: 15px; }
+
+/*div.created-at { position: absolute; top: 0; left: 0; padding: 5px 15px 5px 15px; background-color: lightblue; } */
+
+p.text { font-size: 22px; font-weight: 700; margin-bottom: 0; }
+
+.genButton {
+  width: 150px;
+  height: 35px;
+  margin:auto;
+  padding:auto;
+  background-color:orangered;
+}
+.addButton {
+  width: 150px;
+  height: 35px;
+  margin:auto;
+  padding:auto;
+  background-color:lightgray;
+}
+
+.deleteButton {
+  width: 60px;
+  height: 20px;
+  margin:auto;
+  padding:auto;
+  margin-left: 35px;
+  background-color:lightgray;
+}
+
+.col-buttons {
+    width: 150px;
+    height: auto;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: auto;
+}
+
+.row {
+    width: 300px;
+    height:100px;
+    border: 1px solid black;
+    border-collapse: collapse;
+    align-items: center;
+}
+
+.collect-name {
+    align-items: center;
+    justify-content: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    width: 150px;
+}
+
+.collect-sprite {
+    margin-top: 10px;
+    margin-left: 15px;
+    width: 150px;
+    height: auto
+}
+
+.collect-container {
+    position: relative;
+}
+
+.collect-typeImage {
+    width: 65px;
+    height:auto;
+   /*padding-bottom:8px; */
+}
+
+.collect {
+    width: 250px;
+    height: 100px;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+}
 </style>

@@ -6,7 +6,8 @@
     <h1 class="name"> {{name}} </h1>
     <div class="row-types"><img v-for="item in typeImages" :key="item.imageURL" :src="item.imageURL" class="typeImage"/></div>
     <div class="col-buttons"><button class="genButton" v-on:click="randomPokemon()"> Generate Random </button>
-    <button class="addButton" v-on:click="addPokemon()"> Add to Collection </button></div>
+    <button class="addButton" v-on:click="addPokemon()"> Add to Team </button>
+</div>
     <br><br><hr><br><br>
     </div>
 
@@ -30,7 +31,7 @@
 
             </div>
 
-            <button class="deleteButton" v-on:click="deletePokemon(poke._id)"> Delete </button>
+            <button class="button-4" role="botton" v-on:click="deletePokemon(poke._id)"> Delete </button>
 
         </div>
 
@@ -129,6 +130,11 @@ export default {
                 return map
         },
         async addPokemon() {
+            if (this.collected.length + 1 > 6) {
+                this.error = "Error: Teams have 6 Pokemon capacity."
+                return
+            }
+
             await CollectService.insertPoke(this.name, this.sprite, this.type, this.typeImages)
             this.collected = await CollectService.getCollection()
             this.collected = this.collected.reverse()
@@ -137,6 +143,9 @@ export default {
             await CollectService.deletePoke(id)
             this.collected = await CollectService.getCollection()
             this.collected = this.collected.reverse()
+            if (this.collected.length - 1 <= 6) {
+                this.error=''
+            }
         }
     }
 }
@@ -153,7 +162,7 @@ export default {
 }
 
 .name {
-    margin-left: 5px;
+    margin-left: 17px;
     max-width: 350px;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     align-items: center;
@@ -210,15 +219,6 @@ p.text { font-size: 22px; font-weight: 700; margin-bottom: 0; }
   background-color:lightgray;
 }
 
-.deleteButton {
-  width: 60px;
-  height: 20px;
-  margin:auto;
-  padding:auto;
-  margin-left: 35px;
-  background-color:lightgray;
-}
-
 .col-buttons {
     width: 150px;
     height: auto;
@@ -266,5 +266,70 @@ p.text { font-size: 22px; font-weight: 700; margin-bottom: 0; }
     position: relative;
     display: flex;
     flex-direction: row;
+}
+
+/* CSS */
+.button-4 {
+    width: 80px;
+    height: 30px;
+  appearance: none;
+  background-color: #FAFBFC;
+  border: 1px solid rgba(27, 31, 35, 0.15);
+  border-radius: 6px;
+  box-shadow: rgba(27, 31, 35, 0.04) 0 1px 0, rgba(255, 255, 255, 0.25) 0 1px 0 inset;
+  box-sizing: border-box;
+  color: #24292E;
+  cursor: pointer;
+  display: inline-block;
+  font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 10px;
+  text-align: center;
+  list-style: none;
+  padding: 6px 16px;
+  position: relative;
+  transition: background-color 0.2s cubic-bezier(0.3, 0, 0.5, 1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: middle;
+  white-space: nowrap;
+  word-wrap: break-word;
+  margin:auto;
+  padding:auto;
+  margin-left: 35px;
+  margin-top: 50px;
+}
+
+.button-4:hover {
+  background-color: #F3F4F6;
+  text-decoration: none;
+  transition-duration: 0.1s;
+}
+
+.button-4:disabled {
+  background-color: #FAFBFC;
+  border-color: rgba(27, 31, 35, 0.15);
+  color: #959DA5;
+  cursor: default;
+}
+
+.button-4:active {
+  background-color: #EDEFF2;
+  box-shadow: rgba(225, 228, 232, 0.2) 0 1px 0 inset;
+  transition: none 0s;
+}
+
+.button-4:focus {
+  outline: 1px transparent;
+}
+
+.button-4:before {
+  display: none;
+}
+
+.button-4:-webkit-details-marker {
+  display: none;
 }
 </style>

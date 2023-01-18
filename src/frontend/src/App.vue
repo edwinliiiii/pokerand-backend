@@ -20,6 +20,7 @@ export default {
     width: 450px;
     /*height: 100vh; */
     margin: auto;
+    margin-top: 16px;
     text-align: center;
     display: flex;
     flex-direction: column;

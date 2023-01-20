@@ -41,6 +41,27 @@
 
 <script>
 import CollectService from '../CollectService'
+import RandomService from '../RandomService'
+const grassImage = require('../assets/types/Grass.jpeg')
+const poisonImage = require('../assets/types/Poison.jpeg')
+const fireImage = require('../assets/types/Fire.jpeg')
+const waterImage = require('../assets/types/Water.jpeg')
+const groundImage = require('../assets/types/Ground.jpeg')
+const rockImage = require('../assets/types/Rock.jpeg')
+const steelImage = require('../assets/types/Steel.jpeg')
+const psychicImage = require('../assets/types/Psychic.jpeg')
+const darkImage = require('../assets/types/Dark.jpeg')
+const fairyImage = require('../assets/types/Fairy.jpeg')
+const fightingImage = require('../assets/types/Fight.jpeg')
+const normalImage = require('../assets/types/Normal.jpeg')
+const ghostImage = require('../assets/types/Ghost.jpeg')
+const iceImage = require('../assets/types/Ice.jpeg')
+const bugImage = require('../assets/types/Bug.jpeg')
+const dragonImage = require('../assets/types/Dragon.jpeg')
+const electricImage = require('../assets/types/Electric.jpeg')
+const flyingImage = require('../assets/types/Flying.jpeg')
+const notFound = require('../assets/pokeNotFound.png')
+
 export default {
     // containing our data. could be better abstracted 
     // into Pokemon objects, but we can just utilize fields 
@@ -54,10 +75,10 @@ export default {
             typeMap: this.initMap(new Map()),
             typeImages:[
                 {
-                    imageURL: 'https://raw.githubusercontent.com/edwinliiiii/pokerand/main/src/frontend/types/Grass.jpeg'
+                    imageURL: grassImage
                 },
                 {
-                    imageURL: 'https://raw.githubusercontent.com/edwinliiiii/pokerand/main/src/frontend/types/Poison.jpeg'
+                    imageURL: poisonImage
                 },
             ],
             collected: [],
@@ -76,19 +97,21 @@ export default {
     // all methods
     methods: {
         async randomPokemon() {
-            const res = await fetch('https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0')
-            const allPokemon = await res.json()
-                                                                                    // This handles additions and deletions to the api
+            /*const res = await fetch('https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0')
+            const allPokemon = await res.json() 
+                                                                                            // This handles additions and deletions of Pokemon in the api as the list length may not always be constant
             const choice = Math.floor(Math.random() * allPokemon.results.length);
 
             const finalRes = await fetch(allPokemon.results[choice].url) 
-            const randomPokemon = await finalRes.json()
+            const randomPokemon = await finalRes.json() */
 
+            const randomPokemonURL = await RandomService.getRandom()
+            const randomPokemon = await (await fetch(randomPokemonURL)).json()
             let randomName = randomPokemon.name
             this.name = randomName.charAt(0).toUpperCase() + randomName.slice(1); // Capitalizes First Letter.
             //this.art = randomPokemon.sprites.other.official-artwork.front_default
             if (randomPokemon.sprites.front_default == null) {
-              this.sprite = 'https://github.com/edwinliiiii/pokerand/blob/main/src/frontend/src/assets/pokeNotFound.png?raw=true'
+              this.sprite = notFound
             } else {
               this.sprite = randomPokemon.sprites.front_default
             } 
@@ -108,25 +131,24 @@ export default {
             }
         },
         initMap(map) {
-                map.set('bug', "https://raw.githubusercontent.com/edwinliiiii/pokerand/main/src/frontend/types/Bug.jpeg")
-                map.set('dark', "https://raw.githubusercontent.com/edwinliiiii/pokerand/main/src/frontend/types/Dark.jpeg")
-                map.set('dragon', "https://raw.githubusercontent.com/edwinliiiii/pokerand/main/src/frontend/types/Dragon.jpeg")
-                map.set('electric', "https://raw.githubusercontent.com/edwinliiiii/pokerand/main/src/frontend/types/Electric.jpeg")
-                map.set('fairy', "https://raw.githubusercontent.com/edwinliiiii/pokerand/main/src/frontend/types/Fairy.jpeg")
-                map.set('fighting', "https://raw.githubusercontent.com/edwinliiiii/pokerand/main/src/frontend/types/Fight.jpeg")
-                map.set('fire', "https://raw.githubusercontent.com/edwinliiiii/pokerand/main/src/frontend/types/Fire.jpeg")
-                map.set('flying', "https://raw.githubusercontent.com/edwinliiiii/pokerand/main/src/frontend/types/Flying.jpeg")
-                map.set('ghost', "https://raw.githubusercontent.com/edwinliiiii/pokerand/main/src/frontend/types/Ghost.jpeg")
-                map.set('grass', "https://raw.githubusercontent.com/edwinliiiii/pokerand/main/src/frontend/types/Grass.jpeg")
-                map.set('ground', "https://raw.githubusercontent.com/edwinliiiii/pokerand/main/src/frontend/types/Ground.jpeg")
-                map.set('ice', "https://raw.githubusercontent.com/edwinliiiii/pokerand/main/src/frontend/types/Ice.jpeg")
-                map.set('normal', "https://raw.githubusercontent.com/edwinliiiii/pokerand/main/src/frontend/types/Normal.jpeg")
-                map.set('poison', "https://raw.githubusercontent.com/edwinliiiii/pokerand/main/src/frontend/types/Poison.jpeg")
-                map.set('psychic', "https://raw.githubusercontent.com/edwinliiiii/pokerand/main/src/frontend/types/Psychic.jpeg")
-                map.set('rock', "https://raw.githubusercontent.com/edwinliiiii/pokerand/main/src/frontend/types/Rock.jpeg")
-                map.set('steel', "https://raw.githubusercontent.com/edwinliiiii/pokerand/main/src/frontend/types/Steel.jpeg")
-                map.set('water', "https://raw.githubusercontent.com/edwinliiiii/pokerand/main/src/frontend/types/Water.jpeg")
-                map.set('water', "https://raw.githubusercontent.com/edwinliiiii/pokerand/main/src/frontend/types/Water.jpeg")
+                map.set('bug', bugImage)
+                map.set('dark', darkImage)
+                map.set('dragon', dragonImage)
+                map.set('electric', electricImage)
+                map.set('fairy', fairyImage)
+                map.set('fighting', fightingImage)
+                map.set('fire', fireImage)
+                map.set('flying', flyingImage)
+                map.set('ghost', ghostImage)
+                map.set('grass', grassImage)
+                map.set('ground', groundImage)
+                map.set('ice', iceImage)
+                map.set('normal', normalImage)
+                map.set('poison', poisonImage)
+                map.set('psychic', psychicImage)
+                map.set('rock', rockImage)
+                map.set('steel', steelImage)
+                map.set('water', waterImage)
                 return map
         },
         async addPokemon() {
